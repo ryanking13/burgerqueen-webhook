@@ -1,3 +1,6 @@
+.env
+*.csproj
+
 bin
 obj
 csx
@@ -40,3 +43,4 @@ venv.bak/
 __pycache__/
 *.py[cod]
 *$py.class
+burgerqueen-webhook.zip
