@@ -35,7 +35,12 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         try:
             json_response = r.json()
             coupon_code = json_response['resultMap']['couponPinData']
-            return func.HttpResponse(json.dumps(coupon_code))
+            return func.HttpResponse(
+                json.dumps(coupon_code),
+                headers = {
+                    'Access-Control-Allow-Origin': '*',
+                }
+            )
         except Exception as e:
             logging.info('Exception ' + str(e))
             logging.info('Fail ' + r.text)
