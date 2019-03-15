@@ -13,4 +13,8 @@ func host start
 
 ### Deploy
 
-VScode - azure functions extension
+```sh
+# import local.settings.json
+func azure functionapp fetch-app-settings burgerqueen-api 
+func azure functionapp publish burgerqueen-api
+```
