@@ -1,7 +1,6 @@
 import json
 import logging
 import requests
-import logging
 import azure.functions as func
 
 BASE_URL = 'https://deliveryapp.co.kr/app/coupon/getCouponPinData.do'
