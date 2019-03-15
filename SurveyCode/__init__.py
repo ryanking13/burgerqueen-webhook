@@ -106,31 +106,40 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             pass
         else:
             code = req_body.get('code')
-    
+
     if not code:
         return func.HttpResponse(
-             "설문조사 코드를 입력하세요",
-             status_code=400
+            "설문조사 코드를 입력하세요",
+            status_code=400,
+            headers={
+                'Access-Control-Allow-Origin': '*',
+            }
         )
-     
+
     try:
         val_code = retrieve_code(code)
     except Exception as e:
         logging.info('Exception ' + str(e))
         return func.HttpResponse(
             "Undefined Error",
-            status_code=400
+            status_code=400,
+            headers={
+                'Access-Control-Allow-Origin': '*',
+            }
         )
 
     if val_code == -1:
         return func.HttpResponse(
             "잘못된 설문조사 코드입니다",
-            status_code=400
+            status_code=400,
+            headers={
+                'Access-Control-Allow-Origin': '*',
+            }
         )
-    
+
     return func.HttpResponse(
         json.dumps({'valCode': val_code}),
-        headers = {
+        headers={
             'Access-Control-Allow-Origin': '*',
         }
     )
