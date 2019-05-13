@@ -3,9 +3,10 @@ import logging
 import requests
 import azure.functions as func
 
-BASE_URL = 'https://deliveryapp.co.kr/app/coupon/getCouponPinData.do'
+BASE_URL = 'http://ec2-52-79-88-56.ap-northeast-2.compute.amazonaws.com/bkr-omni/BKR4003.json'
 BASE_HEADERS = {
-    'Referer': 'https://deliveryapp.co.kr',
+    'Host': 'app.burgerking.co.kr:443',
+    'User-Agent': 'Mozilla/5.0 (Linux; Android 4.4.2; Nexus 4 Build/KOT49H) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.114 Mobile Safari/537.36',
 }
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
@@ -22,18 +23,37 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             couponpk = req_body.get('couponpk')
 
     params = {
-        'udid': udid,
-        'couponPk': couponpk,
-        'appVersion': '3.0.9',
-        'channel': '2',
-        'delKingSe': '3',
+        'header': {
+            'result': 'true',
+            # 'error_code': '',
+            # 'error_text': '',
+            # 'info_text': '',
+            # 'message_version': '',
+            # 'login_session_id': '',
+            'trcode': 'BKR4003',
+            # 'ip_address': '',
+            'platform': '01',
+            # 'id_member': '',
+            # 'auth_token': '',
+            'is_cryption': 'false',
+        },
+        'body': {
+            'cd_coupon': int(couponpk),
+            'no_pin': 'null',
+            'fg_app': 'Y',
+            'udid': udid,
+        },
     }
 
-    if udid and couponpk:
-        r = requests.get(url=BASE_URL, params=params, headers=BASE_HEADERS)
+    data = {
+        'message': json.dumps(params)
+    }
+
+    if udid is not None and couponpk is not None:
+        r = requests.post(url=BASE_URL, data=data, headers=BASE_HEADERS)
         try:
             json_response = r.json()
-            coupon_code = json_response['resultMap']['couponPinData']
+            coupon_code = json_response['body']['result_data']
             return func.HttpResponse(
                 json.dumps(coupon_code),
                 headers = {

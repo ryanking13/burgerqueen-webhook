@@ -3,9 +3,10 @@ import logging
 import requests
 import azure.functions as func
 
-BASE_URL = 'https://deliveryapp.co.kr/app/coupon/getCouponList.do'
+BASE_URL = 'http://ec2-52-79-88-56.ap-northeast-2.compute.amazonaws.com/bkr-omni/BKR4001.json'
 BASE_HEADERS = {
-    'Referer': 'https://deliveryapp.co.kr',
+    'Host': 'app.burgerking.co.kr:443',
+    'User-Agent': 'Mozilla/5.0 (Linux; Android 4.4.2; Nexus 4 Build/KOT49H) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.114 Mobile Safari/537.36',
 }
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
@@ -20,17 +21,35 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             name = req_body.get('udid')
 
     params = {
-        'udid': udid,
-        'appVersion': '3.0.9',
-        'channel': '2',
-        'delKingSe': '3',
+        'header': {
+            'result': 'true',
+            # 'error_code': '',
+            # 'error_text': '',
+            # 'info_text': '',
+            # 'message_version': '',
+            # 'login_session_id': '',
+            'trcode': 'BKR4001',
+            # 'ip_address': '',
+            'platform': '01',
+            # 'id_member': '',
+            # 'auth_token': '',
+            'is_cryption': 'false',
+        },
+        'body': {
+            'cdCouponObj': '3',
+            'udid': udid,
+        },
+    }
+
+    data = {
+        'message': json.dumps(params)
     }
 
     if udid:
-        r = requests.get(url=BASE_URL, params=params, headers=BASE_HEADERS)
+        r = requests.post(url=BASE_URL, data=data, headers=BASE_HEADERS)
         try:
             json_response = r.json()
-            coupon_list = json_response['resultlist']
+            coupon_list = json_response['body']['couponList']
             return func.HttpResponse(
                 json.dumps(coupon_list),
                 headers = {
