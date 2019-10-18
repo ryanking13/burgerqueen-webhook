@@ -2,7 +2,7 @@ name: Send request to azure functions regularly to prevent cold start
 
 on:
   schedule:
-  - cron: "*/15 7-20 * * *"
+  - cron: "0/5 7-20 * * *"
 
 jobs:
   run:
@@ -11,6 +11,6 @@ jobs:
     steps:
     - name: curl
       env:
-        URL: https://burgerqueen-api.azurewebsites.net/api/couponlist?udid=andn_46ab9cffd5c7da8ba28a62158ba4d9118097cd9e2ecf916a757e884d30aad7e6d679f3cbdd9c0a1ea838ddf01d9877ca15b6f5d1097ba5cfb3795103cdd86767
+        URL: https://burgerqueen-api.azurewebsites.net/api/couponlist?udid=andn_
       run: |
-        curl $URL
+        curl $URL$RANDOM
