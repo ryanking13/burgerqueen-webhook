@@ -1,7 +1,5 @@
 # Burgerqueen webhook
 
-## DISCLAIMER (2020/02/14): Not used anymore
-
 Azure function app webhook for [Burgerqueen](https://github.com/ryanking13/burgerqueen).
 
 ### How to run
